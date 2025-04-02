@@ -1,0 +1,36 @@
+<template>
+
+    <!--Todo: Show collected information for review. Use the mark up styling from the intakeFormAccountInformation-->
+    <!--Note: You can use the same hard coded code to output the Account information-->
+
+    <c-intake-form-account-information></c-intake-form-account-information>
+
+    <div class="slds-clearfix">
+        <div class="slds-float_left slds-text-heading_small slds-p-vertical_medium slds-form-element_stacked">Application Info</div>
+    </div>
+
+    <template for:each={questionAnswers} for:item="qna">
+        <div class="slds-form-element_stacked" key={qna.question}>
+            <label class="slds-form-element__label">{qna.question}</label>
+            <div class="slds-form-element__control slds-size_1-of-2">
+                    <lightning-formatted-text value={qna.answer}></lightning-formatted-text>
+            </div>
+        </div>
+    </template>
+
+
+    <div class="slds-grid slds-gutters slds-var-p-bottom_small">
+        <div class="slds-col slds-size_1-of-2 slds-form-element_stacked">
+            <lightning-file-upload
+                label="Upload Attachments"
+                name="fileUploader"
+                multiple>
+            </lightning-file-upload>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-form-element_stacked">
+            <c-signature-pad enable-name-signing="true" name-input-label="Type name here:" enable-signature-drawing="true" pad-label="Or draw signature here:" stroke-thickness="2" pen-color="black" pad-color="white" font="30px 'Great Vibes'">
+            </c-signature-pad>
+        </div>
+    </div>
+
+</template>

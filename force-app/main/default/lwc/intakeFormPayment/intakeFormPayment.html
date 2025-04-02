@@ -1,0 +1,60 @@
+<template>
+
+    <lightning-formatted-rich-text value={paymentInstructions}></lightning-formatted-rich-text>
+
+    <lightning-accordion class="example-accordion" active-section-name="A">
+
+        <lightning-accordion-section name="A" label="Online Payment">
+            <div class="slds-p-around_large">
+
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-input type="text" label="First Name" class="slds-p-right_small"></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-input type="text" label="Last Name"></lightning-input>
+                    </div>
+                </div>
+
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_5-of-6">
+                        <lightning-input type="text" label="Card Number" class="slds-p-right_small"></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-6">
+                        <lightning-input type="text" label="CVV"></lightning-input>
+                    </div>
+                </div>
+
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_3-of-5">
+                        <lightning-input type="text" label="Expiration Date"></lightning-input>
+                    </div>
+                </div>
+
+                <lightning-input type="checkbox" label="Billing Address same as Business Address" checked class="slds-p-top_small" onclick={handleCheck}></lightning-input>
+
+                <template if:true={differentBillingAddress}>
+                    <lightning-input-address
+                        address-label=""
+                        street-label="Street"
+                        city-label="City"
+                        country-label="Country"
+                        province-label="State/Province"
+                        postal-code-label="Postal Code">
+                    </lightning-input-address>
+                </template>
+
+            </div>
+
+        </lightning-accordion-section>
+
+        <lightning-accordion-section name="B" label="Check Payment/Money Order">
+            <div class="slds-p-around_large">
+                <lightning-input type="text" label="Check/Money Order Number" onchange={handleChange}></lightning-input>
+                <div>Note: Please send your Check or Money Order along with a paper application & copy of law label tag to the address below. Please write your URN No. In memo field.</div>
+            </div>
+        </lightning-accordion-section>
+
+    </lightning-accordion>
+
+</template>

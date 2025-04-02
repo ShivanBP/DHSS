@@ -1,0 +1,83 @@
+<template>
+
+    <div class="slds-clearfix">
+        <div class="slds-float_left slds-text-heading_small slds-p-vertical_medium slds-form-element_stacked">Account</div>
+    </div>
+
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-2">
+            <div class="slds-form-element_stacked">
+                <label class="slds-form-element__label">Permit Holder Name</label>
+                <lightning-helptext content="Name of person to whom permit will be sent."></lightning-helptext>
+                <div class=”slds-form-element__control”>
+                    <lightning-formatted-text value="Tim Tester"></lightning-formatted-text>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <div class="slds-form-element_stacked">
+                <label class="slds-form-element__label">Business Name</label>
+                <lightning-helptext content="Name of person to whom permit will be sent."></lightning-helptext>
+                <div class="slds-form-element__control slds-size_1-of-2">
+                    <lightning-formatted-text value="Tim's Agency"></lightning-formatted-text>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-2">
+            <div class="slds-form-element_stacked">
+                <label class="slds-form-element__label">Phone</label>
+                <div class=”slds-form-element__control”>
+                    <lightning-formatted-phone value="+18005551212" disabled></lightning-formatted-phone>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <div class="slds-form-element_stacked">
+                <label class="slds-form-element__label">Extension</label>
+                <div class=”slds-form-element__control”>    
+                    <lightning-formatted-text value="1"></lightning-formatted-text>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element_stacked">
+        <label class="slds-form-element__label">Email</label>
+        <div class=”slds-form-element__control”>
+            <lightning-formatted-email value="tims@email.com"></lightning-formatted-email>
+        </div>
+    </div>
+
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-2">
+            <div class="slds-form-element_stacked">
+                <label class="slds-form-element__label">Business Address</label>
+                <lightning-formatted-address
+                    street="121 Spear St."
+                    city="San Francisco"
+                    country="US"
+                    province="CA"
+                    postal-code="94105"
+                    disabled>
+                </lightning-formatted-address>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <div class="slds-form-element_stacked">
+                <label class="slds-form-element__label">Mailing Address</label>
+                <lightning-formatted-address
+                    street="121 Spear St."
+                    city="San Francisco"
+                    country="US"
+                    province="CA"
+                    postal-code="94105"
+                    disabled>
+                </lightning-formatted-address>
+            </div>
+        </div>
+    </div>
+
+</template>
