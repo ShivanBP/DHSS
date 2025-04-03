@@ -2,14 +2,7 @@ public without sharing class IntakeFormController {
 
     @AuraEnabled
     public static Form_Definition__mdt getForm(String formName) {
-
-        //TODO: Get labels in a separate array and reference that on the front end
-        return [SELECT Id, Header__c, Payment_Instructions__c, Side_Panel_Text__c, Footer_Text__c,
-                        (SELECT Question__c, Data_Type__c, Options__c, HTML_Code__c, Required__c FROM Form_Elements__r) 
-                FROM Form_Definition__mdt 
-                WHERE DeveloperName = :formName 
-                LIMIT 1];
-                
+        return PermitService.getFormDefinition(formName);
     }
 
     @AuraEnabled
@@ -37,11 +30,15 @@ public without sharing class IntakeFormController {
 
         }
 
+        PermitService.createPermit(formIntake.Id);
+
     }
+
+
     
     public class QuestionAnswer {
         public String question {get;set;}
         public String answer {get;set;}
     }
-
+    
 }
