@@ -2,6 +2,7 @@ import { LightningElement, wire } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
+import getPath from '@salesforce/apex/IntakeFormController.getPath'
 import getForm from '@salesforce/apex/IntakeFormController.getForm';
 import submitFormData from '@salesforce/apex/IntakeFormController.submitForm';
 
