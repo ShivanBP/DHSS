@@ -8,12 +8,10 @@
 
         <!--PATH START-->
         <div class="slds-var-p-bottom_small">
-            <lightning-progress-indicator current-step={currentStepString} type="path" variant="base">
-                <lightning-progress-step label="Account Information" value="1"></lightning-progress-step>
-                <lightning-progress-step label="Permit Application" value="2"></lightning-progress-step>
-                <lightning-progress-step label="Review & Signature" value="3"></lightning-progress-step>
-                <lightning-progress-step label="Payment" value="4"></lightning-progress-step>
-                <lightning-progress-step label="Confirmation" value="5"></lightning-progress-step>
+            <lightning-progress-indicator current-step={currentStep} type="path" variant="base">
+                <template for:each={pathSteps} for:item="step" for:index="index">
+                    <lightning-progress-step key={step} label={step} value={step}></lightning-progress-step>
+                </template>
             </lightning-progress-indicator>
         </div>
         <!--PATH START-->
@@ -25,11 +23,11 @@
 
             <div class="slds-col slds-size_2-of-4">
 
-                <template lwc:if={firstStep}>
+                <template lwc:if={showAccountInformationStep}>
                     <c-intake-form-account-information></c-intake-form-account-information>
                 </template>
 
-                <template lwc:if={secondStep}>
+                <template lwc:if={showPermitApplicationStep}>
                     <template for:each={formDefinition.Form_Elements__r} for:item="element">
                         <div key={element.Id} class="slds-var-p-bottom_small">
                             <c-intake-form-element element={element} data-input=true></c-intake-form-element>
@@ -37,15 +35,21 @@
                     </template>
                 </template>
 
-                <template lwc:if={thirdStep}>
+                <template lwc:if={showUploadAttachmentsStep}>
+                    <template for:each={formAttachments} for:item="attachment">
+                        <lightning-file-upload key={attachment} label={attachment}></lightning-file-upload>
+                    </template>
+                </template>
+
+                <template lwc:if={showReviewAndSignStep}>
                     <c-intake-form-review-and-sign question-answers={questionAnswers}></c-intake-form-review-and-sign>
                 </template>
 
-                <template lwc:if={fourthStep}>
+                <template lwc:if={showPaymentStep}>
                     <c-intake-form-payment payment-instructions={formDefinition.Payment_Instructions__c}></c-intake-form-payment>
                 </template>
 
-                <template lwc:if={fifthStep}>
+                <template lwc:if={showConfirmationStep}>
                     <div class="slds-p-around_xx-large slds-text-align_center">
                         We've received your permit application. (If permit auto approved, provide number)
                     </div>
@@ -61,15 +65,14 @@
         <!--TODO: Align next button with right side of content and make the position permanent.-->
         <template lwc:if={showNavigation}>
             <div class="slds-align_absolute-center slds-var-p-top_medium">
-                <template lwc:if={firstStep}>
+                <template lwc:if={showAccountInformationStep}>
                     <lightning-button label="Select a Different Business" onclick={handleSelectBusiness}></lightning-button>
                     <lightning-button variant="brand" label="Add New Business" icon-name="utility:add" onclick={handleNewBusiness} class="slds-m-left_x-small"></lightning-button>
                 </template>
                 <template lwc:else>
                     <lightning-button label="Previous" 
                         icon-name="utility:chevronleft"
-                        onclick={previousStep}
-                        disabled={isPreviousDisabled}>
+                        onclick={previousStep}>
                     </lightning-button>
                 </template>
                 <lightning-button label={progressLabel}
