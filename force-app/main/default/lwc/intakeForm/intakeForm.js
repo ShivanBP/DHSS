@@ -1,9 +1,8 @@
 import { LightningElement, wire } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
-import getPath from '@salesforce/apex/IntakeFormController.getPath'
 import getForm from '@salesforce/apex/IntakeFormController.getForm';
+import getFormPath from '@salesforce/apex/IntakeFormController.getFormPath';
 import submitFormData from '@salesforce/apex/IntakeFormController.submitForm';
 
 import IntakeFormNewAccountModal from 'c/intakeFormNewAccountModal';
@@ -14,50 +13,52 @@ export default class IntakeForm extends LightningElement {
 
     selectedForm = '';
 
-    formDefinition;
-
-    currentStep = 1;
-    currentStepString = '1'
-
     hasData = false;
 
     questionAnswers = [];
 
+    formDefinition;
 
-    get showHeader() {
-        return formDefinition != null;
+    formAttachments = [];
+
+    questionAnswers = [];
+
+    pathSteps = [];
+    currentStep = '';
+    currentIndex = 1;
+
+    hasData = false;
+
+    get showAccountInformationStep() {
+        return this.currentStep === 'Account Information';
     }
 
-    get firstStep() {
-        return this.currentStep === 1;
+    get showPermitApplicationStep() {
+        return this.currentStep === 'Permit Application';
     }
 
-    get secondStep() {
-        return this.currentStep === 2;
+    get showUploadAttachmentsStep() {
+        return this.currentStep === 'Upload Attachments';
     }
 
-    get thirdStep() {
-        return this.currentStep === 3;
+    get showReviewAndSignStep() {
+        return this.currentStep === 'Review & Signature';
     }
 
-    get fourthStep() {
-        return this.currentStep === 4;
+    get showPaymentStep() {
+        return this.currentStep === 'Payment';
     }
 
-    get fifthStep() {
-        return this.currentStep === 5;
-    }
-
-    get isPreviousDisabled() {
-        return this.currentStep === 1;
+    get showConfirmationStep() {
+        return this.currentStep === 'Confirmation';
     }
 
     get showNavigation() {
-        return this.currentStep < 5;
+        return !this.showConfirmationStep;
     }
 
     get progressLabel() { 
-        return this.currentStep == 4 ? 'Submit' : 'Next';
+        return this.showReviewAndSignStep ? 'Submit' : 'Next';
     }
 
     @wire(CurrentPageReference)
@@ -66,9 +67,13 @@ export default class IntakeForm extends LightningElement {
     async connectedCallback() {
         this.selectedForm = this.currentPageReference.state.c__form; 
         if(this.selectedForm != null) {
-            console.log('this.selectedForm:  ' + this.selectedForm);
             this.formDefinition = await getForm({formName: this.selectedForm});
-            console.log('this.formDefinition:  ' + JSON.stringify(this.formDefinition));
+            if(this.formDefinition.Attachments__c != null) {
+                this.formAttachments = this.formDefinition.Attachments__c.split(';');
+            }
+            this.pathSteps = await getFormPath({formName: this.selectedForm});
+            this.currentStep = this.pathSteps[0];
+            console.log('this.pathSteps:  ' + JSON.stringify(this.pathSteps));
             this.hasData = true;
         }
     }
@@ -76,26 +81,35 @@ export default class IntakeForm extends LightningElement {
 
     async nextStep() {
 
+        console.log('this step: ' + this.currentStep);
+
         switch(this.currentStep){
-            case 1:
-                break;
-            case 2:
+            case 'Permit Application':
                 this.readQuestionAnswers();
                 break;
-            case 3:
+            case 'Review & Signature':
                 this.submitForm();
                 break;
             default:
         }
 
-        this.currentStep++;
-        this.currentStepString = this.currentStep.toString();
+        this.currentIndex = this.pathSteps.indexOf(this.currentStep);
+        this.currentStep = this.pathSteps[this.currentIndex + 1];
+
+
+
+        console.log('front step: ' + this.currentStep);
 
     }
 
     previousStep() {
-        this.currentStep--;
-        this.currentStepString = this.currentStep.toString();
+
+        console.log('this step: ' + this.currentStep);
+
+        this.currentIndex = this.pathSteps.indexOf(this.currentStep);
+        this.currentStep = this.pathSteps[this.currentIndex - 1];
+
+        console.log('back step: ' + this.currentStep);
     }
 
     async handleSelectBusiness() {
@@ -133,15 +147,6 @@ export default class IntakeForm extends LightningElement {
 
     async submitForm() {
         await submitFormData({ formName: this.selectedForm, incomingQuestionAnswers: this.questionAnswers });
-        //this.showToast();
-    }
-
-    showToast() {
-        const event = new ShowToastEvent({
-            variant: 'success',
-            title: 'Application Submitted',
-        });
-        this.dispatchEvent(event);
     }
 
 }

@@ -41,7 +41,7 @@ public with sharing class PermitService {
     }
 
     public static Form_Definition__mdt getFormDefinition(String formName) {
-        return [SELECT Id, Header__c, Payment_Instructions__c, Side_Panel_Text__c, Footer_Text__c,
+        return [SELECT Id, Attachments__c, Header__c, Payment_Instructions__c, Side_Panel_Text__c, Footer_Text__c,
                        (SELECT Question__c, Data_Type__c, Options__c, HTML_Code__c, Mapped_Field__c, Required__c FROM Form_Elements__r) 
                 FROM Form_Definition__mdt 
                 WHERE DeveloperName = :formName 
