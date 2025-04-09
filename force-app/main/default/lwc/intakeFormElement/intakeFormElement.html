@@ -1,40 +1,42 @@
 <template>
-    <div class="slds-form-element_stacked">
-        <template lwc:if={isText}> 
-            <lightning-input type="text" label={element.Question__c} onchange={handleChange}></lightning-input>
-        </template>
-        <template lwc:if={isNumber}> 
-            <lightning-input type="text" label={element.Question__c} onchange={handleChange}></lightning-input>
-        </template>
-        <template lwc:if={isCheckbox}>
-            <lightning-input type="checkbox" label={element.Question__c} onchange={handleCheckboxChange}></lightning-input>
-        </template>
-        <template lwc:if={isPicklist}> 
-            <lightning-combobox label={element.Question__c} options={options} onchange={handleChange}></lightning-combobox>
-        </template>
-        <template lwc:if={isRadioGroup}> 
-            <lightning-radio-group type="radio" label={element.Question__c} options={options} onchange={handleChange}></lightning-radio-group>
-        </template>
-        <template lwc:if={isTextArea}> 
-            <lightning-textarea label={element.Question__c} onchange={handleChange}></lightning-textarea>
-        </template>
-        <template lwc:if={isDualListBox}> 
-            <lightning-dual-listbox label={element.Question__c} options={options} onchange={handleChange}>
-            </lightning-dual-listbox>
-        </template>
-        <template lwc:if={isAddress}> 
-            <lightning-input-address
-                address-label={element.Question__c}
-                street-label="Street"
-                city-label="City"
-                country-label="County"
-                province-label="State/Province"
-                postal-code-label="Postal Code"
-                province="Delaware">
-            </lightning-input-address>
-        </template>
-        <template lwc:if={isOutputOnly}> 
-            <lightning-formatted-rich-text value={element.HTML_Code__c}></lightning-formatted-rich-text>
-        </template>
-    </div>
+    <template lwc:if={showElement}>
+        <div class="slds-form-element_stacked">
+            <template lwc:if={isText}> 
+                <lightning-input type="text" label={element.Question__c} onchange={handleChange} required={element.Required__c}></lightning-input>
+            </template>
+            <template lwc:if={isNumber}> 
+                <lightning-input type="text" label={element.Question__c} onchange={handleChange}></lightning-input>
+            </template>
+            <template lwc:if={isCheckbox}>
+                <lightning-input type="checkbox" label={element.Question__c} onchange={handleCheckboxChange}></lightning-input>
+            </template>
+            <template lwc:if={isPicklist}> 
+                <lightning-combobox label={element.Question__c} options={options} onchange={handleChange}></lightning-combobox>
+            </template>
+            <template lwc:if={isRadioGroup}> 
+                <lightning-radio-group type="radio" label={element.Question__c} options={options} onchange={handleChange}></lightning-radio-group>
+            </template>
+            <template lwc:if={isTextArea}> 
+                <lightning-textarea label={element.Question__c} onchange={handleChange}></lightning-textarea>
+            </template>
+            <template lwc:if={isDualListBox}> 
+                <lightning-dual-listbox label={element.Question__c} options={options} onchange={handleChange}>
+                </lightning-dual-listbox>
+            </template>
+            <template lwc:if={isAddress}> 
+                <lightning-input-address
+                    address-label={element.Question__c}
+                    street-label="Street"
+                    city-label="City"
+                    country-label="County"
+                    province-label="State/Province"
+                    postal-code-label="Postal Code"
+                    province="Delaware">
+                </lightning-input-address>
+            </template>
+            <template lwc:if={isOutputOnly}> 
+                <lightning-formatted-rich-text value={element.HTML_Code__c}></lightning-formatted-rich-text>
+            </template>
+        </div>
+    </template>
 </template>

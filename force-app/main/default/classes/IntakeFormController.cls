@@ -6,18 +6,18 @@ public without sharing class IntakeFormController {
     }
 
     @AuraEnabled
-    public static Map<String,String> getFormPath(String formName) {
+    public static List<String> getFormPath(String formName) {
 
         Form_Definition__mdt formDefinition = [SELECT Id, Show_Payment_Step__c, Show_Upload_Step__c FROM Form_Definition__mdt WHERE DeveloperName = :formName LIMIT 1];
 
-        List<String> path = new List<String>{'Account Information', 'Permit Application', 'Upload Attachments', 'Review & Signature', 'Payment', 'Confirmation'};
+        List<String> path = new List<String>{'Account Information', 'Permit Application', 'Documents', 'Review & Signature', 'Payment', 'Confirmation'};
 
         if(!formDefinition.Show_Payment_Step__c) {
             path.remove(path.indexOf('Payment'));
         }
 
         if(!formDefinition.Show_Upload_Step__c) {
-            path.remove(path.indexOf('Upload Attachments'));
+            path.remove(path.indexOf('Documents'));
         }
 
         return path;

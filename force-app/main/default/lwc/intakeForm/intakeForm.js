@@ -37,8 +37,8 @@ export default class IntakeForm extends LightningElement {
         return this.currentStep === 'Permit Application';
     }
 
-    get showUploadAttachmentsStep() {
-        return this.currentStep === 'Upload Attachments';
+    get showDocumentsStep() {
+        return this.currentStep === 'Documents';
     }
 
     get showReviewAndSignStep() {
@@ -65,24 +65,66 @@ export default class IntakeForm extends LightningElement {
     currentPageReference;
 
     async connectedCallback() {
+
         this.selectedForm = this.currentPageReference.state.c__form; 
+
         if(this.selectedForm != null) {
+
             this.formDefinition = await getForm({formName: this.selectedForm});
+
             if(this.formDefinition.Attachments__c != null) {
+
                 this.formAttachments = this.formDefinition.Attachments__c.split(';');
+
             }
+
             this.pathSteps = await getFormPath({formName: this.selectedForm});
+
             this.currentStep = this.pathSteps[0];
-            console.log('this.pathSteps:  ' + JSON.stringify(this.pathSteps));
+
             this.hasData = true;
+            
         }
+
+    }
+
+    applyFormRules() {       
+
+        this.readQuestionAnswers();
+
+        for(let formRule of this.formDefinition.Form_Rules__r) {
+            var controllingFieldData = this.questionAnswers.find(qa => qa.id === formRule.Controlling_Field__c);
+
+            console.log('formRule: ' + JSON.stringify(formRule));
+            console.log('controllingFieldData: ' + JSON.stringify(controllingFieldData));
+
+            this.template.querySelectorAll('[data-input=true]').forEach(component => {
+
+                console.log()
+
+                if(component.element.Id == formRule.Controlled_Field__c) {
+
+                    switch(formRule.Action__c){
+                        case 'Show on true':
+                            component.showOnTrue(controllingFieldData.answer);
+                            break;
+                        case 'Hide on true':
+                            component.hideOnTrue(controllingFieldData.answer);
+                            break;
+                        default:
+                    }
+                }
+    
+            });
+    
+        }
+
     }
     
 
     async nextStep() {
 
-        console.log('this step: ' + this.currentStep);
-
+        //Actions to take before moving to next step
         switch(this.currentStep){
             case 'Permit Application':
                 this.readQuestionAnswers();
@@ -96,20 +138,11 @@ export default class IntakeForm extends LightningElement {
         this.currentIndex = this.pathSteps.indexOf(this.currentStep);
         this.currentStep = this.pathSteps[this.currentIndex + 1];
 
-
-
-        console.log('front step: ' + this.currentStep);
-
     }
 
     previousStep() {
-
-        console.log('this step: ' + this.currentStep);
-
         this.currentIndex = this.pathSteps.indexOf(this.currentStep);
         this.currentStep = this.pathSteps[this.currentIndex - 1];
-
-        console.log('back step: ' + this.currentStep);
     }
 
     async handleSelectBusiness() {
@@ -122,6 +155,8 @@ export default class IntakeForm extends LightningElement {
 
     //This method stores the question answers
     readQuestionAnswers() {
+
+        this.questionAnswers = [];
 
         this.template.querySelectorAll('[data-input=true]').forEach(component => {
 
@@ -139,7 +174,7 @@ export default class IntakeForm extends LightningElement {
                     answer = component.userInput;
                 }
 
-                this.questionAnswers.push({question: component.element.Question__c, answer: answer});
+                this.questionAnswers.push({ question: component.element.Question__c, answer: answer, id: component.element.Id });
 
             }
         });

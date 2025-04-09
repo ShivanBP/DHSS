@@ -30,12 +30,12 @@
                 <template lwc:if={showPermitApplicationStep}>
                     <template for:each={formDefinition.Form_Elements__r} for:item="element">
                         <div key={element.Id} class="slds-var-p-bottom_small">
-                            <c-intake-form-element element={element} data-input=true></c-intake-form-element>
+                            <c-intake-form-element element={element} data-input=true onfieldupdate={applyFormRules}></c-intake-form-element>
                         </div>
                     </template>
                 </template>
 
-                <template lwc:if={showUploadAttachmentsStep}>
+                <template lwc:if={showDocumentsStep}>
                     <template for:each={formAttachments} for:item="attachment">
                         <lightning-file-upload key={attachment} label={attachment}></lightning-file-upload>
                     </template>

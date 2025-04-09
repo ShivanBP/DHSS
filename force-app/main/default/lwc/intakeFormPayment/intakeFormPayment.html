@@ -4,6 +4,12 @@
 
     <lightning-accordion class="example-accordion" active-section-name="A">
 
+        <!--<lightning-accordion-section name="A" label="Online Payment">
+
+            <div class="slds-p-around_large">Make the payment at [VELOCITY WEBSITE] and enter your confirmation. Your confirmation code is [CONFIRMATION CODE].</div>
+
+        </lightning-accordion-section>-->
+
         <lightning-accordion-section name="A" label="Online Payment">
             <div class="slds-p-around_large">
 
@@ -51,7 +57,7 @@
         <lightning-accordion-section name="B" label="Check Payment/Money Order">
             <div class="slds-p-around_large">
                 <lightning-input type="text" label="Check/Money Order Number" onchange={handleChange}></lightning-input>
-                <div>Note: Please send your Check or Money Order along with a paper application & copy of law label tag to the address below. Please write your URN No. In memo field.</div>
+                <div>For Check, or Money order, please enter the number and send your Check or Money Order (payable to the State of Delaware) along with paper application & URN No.</div>
             </div>
         </lightning-accordion-section>
 

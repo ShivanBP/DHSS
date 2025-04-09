@@ -5,6 +5,9 @@ export default class IntakeFormElement extends LightningElement {
     @api element;
     @api userInput;
     options = [];
+    
+    showElement = true;
+
 
     get isText() {
         return this.element.Data_Type__c === 'Text';
@@ -44,7 +47,7 @@ export default class IntakeFormElement extends LightningElement {
     
 
     connectedCallback() {
-        console.log(JSON.stringify(this.element));
+        //console.log(JSON.stringify(this.element));
         if(this.element.hasOwnProperty('Options__c')) {
             const values = this.element.Options__c.split(';');
             for(let v of values) {
@@ -54,7 +57,10 @@ export default class IntakeFormElement extends LightningElement {
                 this.options = [...this.options, option];
             }
         }
+    }
 
+    renderedCallback() {
+        this.fireApplyRulesEvent();
     }
 
     handleChange(event) {
@@ -62,7 +68,22 @@ export default class IntakeFormElement extends LightningElement {
     }
 
     handleCheckboxChange(event) {
-        this.userInput = event.target.checked;        
+        this.userInput = event.target.checked;
+        this.fireApplyRulesEvent();
+    }
+
+    fireApplyRulesEvent() {
+        this.dispatchEvent(new CustomEvent("fieldupdate"));
+    }
+
+    //Form rule
+    @api showOnTrue(controllingValue) {
+        this.showElement = controllingValue == 'Yes' ? true : false;
+    }
+
+    //Form rule
+    @api hideOnTrue(controllingValue) {
+        this.showElement = controllingValue == 'Yes' ? false : true;
     }
 
 }
